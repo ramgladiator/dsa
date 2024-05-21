@@ -1,79 +1,70 @@
-package com.kk.linedlist.practice.problems;
+package com.kk.linkedlist;
 
-//https://leetcode.com/problems/add-two-numbers/discuss/3675747/Beats-100-oror-C%2B%2B-oror-JAVA-oror-PYTHON-oror-Beginner-Friendly
+//https://leetcode.com/problems/add-two-numbers/
 public class AddTwoNumbers {
+/*
+    Time Complexity:
 
-	public static void main(String[] args) {
+    The algorithm iterates through both input linked lists simultaneously, traversing each list at most once.
+    Therefore, the time complexity is O(max(n, m)), where n and m are the lengths of the input linked lists l1 and l2, respectively.
+    Space Complexity:
 
-		ListNode node1 = new ListNode(2);
-		ListNode node2 = new ListNode(4);
-		ListNode node3 = new ListNode(3);
+    The space complexity is O(max(n, m)), where n and m are the lengths of the input linked lists l1 and l2, respectively.
+    This space is primarily consumed by the output linked list, which stores the sum of the two numbers.
+            Additionally, a constant amount of extra space is used for variables like curr and carry.*/
 
-		node1.next = node2;
-		node2.next = node3;
-		node3.next = null;
+    public static void main(String[] args) {
+        // Creating example linked lists representing two numbers: 342 and 465
+        ListNode l1 = new ListNode(2);
+        l1.next = new ListNode(4);
+        l1.next.next = new ListNode(3);
 
-		ListNode node4 = new ListNode(5);
-		ListNode node5 = new ListNode(6);
-		ListNode node6 = new ListNode(4);
+        ListNode l2 = new ListNode(5);
+        l2.next = new ListNode(6);
+        l2.next.next = new ListNode(4);
 
-		node4.next = node5;
-		node5.next = node6;
-		node6.next = null;
+        // Create an instance of AddTwoNumbers
+        AddTwoNumbers solution = new AddTwoNumbers();
 
-		ListNode addTwoNumbers = addTwoNumbers(node1, node4);
-		while (addTwoNumbers!= null) {
-			System.out.println("Final list is " + addTwoNumbers.val);
-			addTwoNumbers = addTwoNumbers.next;
-		}
+        // Call the addTwoNumbers method to add the two numbers
+        ListNode result = solution.addTwoNumbers(l1, l2);
 
-	}
+        // Print the result
+        System.out.println("Sum of the two numbers:");
+        while (result != null) {
+            System.out.print(result.val + " ");
+            result = result.next;
+        }
+    }
 
-	public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummyHead = new ListNode();
+        ListNode curr = dummyHead;
+        int carry = 0;
 
-		ListNode node = new ListNode(0);
-		ListNode dummy = node;
-		int carry = 0;
-		while (l1 != null || l2 != null || carry != 0) {
+        while (l1 != null || l2 != null) {
+            int x = (l1 != null) ? l1.val : 0;
+            int y = (l2 != null) ? l2.val : 0;
+            int sum = x + y + carry;
+            carry = sum / 10;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
+            if (l1 != null) l1 = l1.next;
+            if (l2 != null) l2 = l2.next;
+        }
 
-			int digit1 = (l1 != null) ? l1.val : 0;
-			int digit2 = (l2 != null) ? l2.val : 0;
+        if (carry > 0) {
+            curr.next = new ListNode(carry);
+        }
 
-			int sum = digit1 + digit2 + carry;
-			int digit = sum % 10;
-			carry = sum / 10;
+        return dummyHead.next;
+    }
 
-			ListNode newNode = new ListNode(digit);
-			dummy.next = newNode;
-			dummy = dummy.next;
-
-			l1 = (l1 != null) ? l1.next : null;
-			l2 = (l2 != null) ? l2.next : null;
-
-		}
-
-		ListNode result = node.next;
-		node.next = null;
-
-		return result;
-
-	}
-
-	public static class ListNode {
-		int val;
-		ListNode next;
-
-		ListNode() {
-		}
-
-		ListNode(int val) {
-			this.val = val;
-		}
-
-		ListNode(int val, ListNode next) {
-			this.val = val;
-			this.next = next;
-		}
-	}
-
+    static class ListNode {
+        int val;
+        ListNode next;
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
 }
